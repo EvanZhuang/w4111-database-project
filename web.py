@@ -9,7 +9,8 @@ def home():
     if not session.get('logged_in'):
         return render_template('login.html')
     else:
-        return 'Hello Boss!  <a href="/logout">Logout</a>'
+        return main_page()
+        #return 'Hello Boss!  <a href="/logout">Logout</a>'
  
 @app.route('/login', methods=['POST'])
 def do_admin_login():
@@ -23,6 +24,15 @@ def do_admin_login():
 def logout():
     session['logged_in'] = False
     return home()
+
+@app.route("/main")
+def main_page():
+    #GET DATA FROM DATABASE
+    user = {'username': 'custudent'}
+    restaurant  = {'rest_name' : "McDonald", "rest_description": "They make fried chicken"}
+    return(render_template('main_page.html', user = user, rest = restaurant))
+
+
     
 if __name__ == "__main__":
     app.secret_key = os.urandom(12)
