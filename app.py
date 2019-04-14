@@ -95,6 +95,7 @@ def register():
 		session['user_id'] = request.form['username']
 		session['logged_in'] = True
 		user = {'firstname': request.form['firstname'], 'lastname': request.form['lastname'], 'member_since': "'" + str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')) + "'"}
+                session['user'] = user
 		return dashboard()
 	else:
 		return render_template('welcome.html')
