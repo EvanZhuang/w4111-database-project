@@ -1,0 +1,83 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://hammerjs.github.io/dist/hammer.min.js"></script>
+<link rel="stylesheet" href="/static/dashboard.css" type="text/css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+  .checked {
+    color: orange;
+  }
+</style>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse" style="z-index: 10;">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/#">Eater</a>
+        </div>
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="/#">Home</a></li>
+          <li class="active"><a href="/logout">Log Out</a></li>
+          <li><a align="center" style="font-family:verdana;color:pink;"> I eat my burritos like I put on my pants, one leg at a time </a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><b style="font-family:verdana;color:white;">Welcome, {{ user.firstname}} {{ user.lastname}}!</b></li> <br>
+	        <li><b style="font-family:verdana;color:white;">We are glad to have you since {{ user.member_since}}</b></li>
+        </ul>
+      </div>
+    </nav>
+
+<div class="tinder" style="position: absolute; top: 0;">
+  <div class="tinder--status">
+    <i class="fa fa-remove"></i>
+    <i class="fa fa-heart"></i>
+  </div>
+
+  <div class="tinder--cards">
+    {% for rest in rests %}
+      <div class="tinder--card">
+        <img src= {{ rest.pic_url }}>
+        <h3>{{ rest.name }}</h3>
+        <p>Opening Hour: {{ rest.opening_hours }}</p>
+        <p>Closing Hour: {{ rest.opening_hours }}</p>
+        <p>Type of Cuisine: {{ rest.cuisine }}</p> 
+        <p class="fa fa-star {% if rest.rating >= 1 %} checked {% endif %}"></p>
+        <p class="fa fa-star {% if rest.rating >= 2 %} checked {% endif %}"></p>
+        <p class="fa fa-star {% if rest.rating >= 3 %} checked {% endif %}"></p>
+        <p class="fa fa-star {% if rest.rating >= 4 %} checked {% endif %}"></p>
+        <p class="fa fa-star {% if rest.rating >= 5 %} checked {% endif %}"></p> <br>
+        {% if rest.last_visit%} 
+        <p> You last visited here {{rest.last_visit}}</p> 
+        {% endif %}
+        <p style="color:black;font-size:14px;font-style: italic;">{{ rest.comment }} <br>
+            <i class="fa fa-star {% if rest.userstar >= 1 %} checked {% endif %}"></i>
+            <i class="fa fa-star {% if rest.userstar >= 2 %} checked {% endif %}"></i>
+            <i class="fa fa-star {% if rest.userstar >= 3 %} checked {% endif %}"></i>
+            <i class="fa fa-star {% if rest.userstar >= 4 %} checked {% endif %}"></i>
+            <i class="fa fa-star {% if rest.userstar >= 5 %} checked {% endif %}"></i> <br>
+            <i>{{ rest.fname }} {{ rest.lname }} wrote on {{ rest.comment_ts }}</i> 
+        </p>
+        
+        
+
+        
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="tinder--buttons">
+    <button id="nope"><i class="fa fa-remove"></i></button>
+    <button id="love"><i class="fa fa-heart"></i></button>
+  </div>
+</div>
+</form>
+<script type="text/javascript" src="/static/dashboard.js"></script>
+</body>
+</html>
