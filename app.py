@@ -1,5 +1,4 @@
 import os, datetime
-from datetime import datetime
 import ast
 import random
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory, flash, session
@@ -212,7 +211,7 @@ def add():
 @app.route('/createPost', methods=['POST'])
 def createPost():
   text = request.form['text']
-  date = datetime.today().strftime('%Y-%m-%d')
+  date = datetime.datetime.today().strftime('%Y-%m-%d')
   gid = request.form['view']
   cmd = "INSERT INTO group_posts(group_id, text, user_id, timestamp) VALUES (%s, %s, %s, %s);"
   db.engine.execute(cmd, (gid, text, '1', date));
