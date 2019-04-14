@@ -23,7 +23,8 @@
           <a class="navbar-brand" href="/#">Eater</a>
         </div>
         <ul class="nav navbar-nav">
-          <li class="active"><a href="/#">Home</a></li>
+          <li class="active"><a href="/dashboard">Home</a></li>
+          <li class="active"><a href="/group">Groups</a></li>
           <li class="active"><a href="/logout">Log Out</a></li>
           <li><a align="center" style="font-family:verdana;color:pink;"> I eat my burritos like I put on my pants, one leg at a time </a></li>
         </ul>
@@ -43,7 +44,7 @@
   <div class="tinder--cards">
     {% for rest in rests %}
       <div class="tinder--card">
-        <img src= {{ rest.pic_url }}>
+        <img src= {{ rest.pic_url }} style="width:400;height:200px;">
         <h3>{{ rest.name }}</h3>
         <p>Opening Hour: {{ rest.opening_hours }}</p>
         <p>Closing Hour: {{ rest.opening_hours }}</p>
