@@ -37,7 +37,6 @@ def dashboard():
 			visits = db.engine.execute("SELECT to_char(timestamp, 'YYYY-MM-DD') FROM VISITS WHERE rest_id = %s AND user_id = '%s' ORDER BY timestamp DESC"  %(_[0], session.get('user_id')))
 			if visits.rowcount > 0:
 				rec["last_visit"] = visits.first()[0]
-				print(rec["last_visit"])
 			else:
 				rec["last_visit"] = False
 			for i, col in enumerate(col_names):
@@ -80,7 +79,6 @@ def reg():
 
 @app.route('/register', methods=['POST','GET'])
 def register():
-	print("REGISTER REACHED")
 	if request.method == 'POST':
 		password = request.form['password']
 		passwordrepeat = request.form['passwordrepeat']
@@ -94,8 +92,7 @@ def register():
             %(request.form['username'], request.form['firstname'], request.form['lastname'], request.form['password'], "'" + str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')) + "'"))
 		session['user_id'] = request.form['username']
 		session['logged_in'] = True
-		user = {'firstname': request.form['firstname'], 'lastname': request.form['lastname'], 'member_since': "'" + str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')) + "'"}
-                session['user'] = user
+		user = {'firstname': request.form['firstname'], 'lastname': request.form['lastname'], 'member_since': "'" + str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')) + "'"}; session['user'] = user
 		return dashboard()
 	else:
 		return render_template('welcome.html')
@@ -118,7 +115,6 @@ def index():
   """
 
   # DEBUG: this is debugging code to see what request looks like
-  print (request.args)
 
 
   #
@@ -166,7 +162,7 @@ def index():
 @app.route('/another', methods=['POST'])
 def another():
   gid = request.form['view']
-  cmd = "SELECT * from group_posts where group_id = %s;"
+  cmd = "SELECT * from group_posts where group_id = %s order by timestamp;"
   cursor = db.engine.execute(cmd, (gid));
 
   posts = []
@@ -182,7 +178,7 @@ def another():
     gname.append([result['group_name'], result['group_id']])
   cursor.close()
 
-  cmd = "SELECT fname, lname, timestamp from group_posts as g join users as u on g.user_id = u.user_id where group_id = %s;"
+  cmd = "SELECT fname, lname, timestamp from group_posts as g join users as u on g.user_id = u.user_id where group_id = %s order by timestamp;"
   cursor = db.engine.execute(cmd, (gid));
 
   post_details = []
@@ -206,7 +202,7 @@ def add():
   gname = request.form['gname']
   gtype = request.form['gtype']
   cmd = "INSERT INTO groups(group_name, group_type, created_by) VALUES (%s, %s, %s);"
-  db.engine.execute(cmd, (gname, gtype, '1'));
+  db.engine.execute(cmd, (gname, gtype, session.get('user_id')));
   return redirect('/group')
 
 @app.route('/createPost', methods=['POST'])
@@ -215,14 +211,14 @@ def createPost():
   date = datetime.datetime.today().strftime('%Y-%m-%d')
   gid = request.form['view']
   cmd = "INSERT INTO group_posts(group_id, text, user_id, timestamp) VALUES (%s, %s, %s, %s);"
-  db.engine.execute(cmd, (gid, text, '1', date));
+  db.engine.execute(cmd, (gid, text, session.get('user_id'), date));
   return redirect('/group')
 
 @app.route('/joinGroup', methods=['POST'])
 def joinGroup():
   gid = request.form['gid']
   cmd = "INSERT INTO user_join_groups(user_id, group_id, since) VALUES (%s, %s, %s);"
-  db.engine.execute(cmd, ('1', gid, "2018-03-04"));
+  db.engine.execute(cmd, (session.get('user_id'), gid, "2018-03-04"));
   return redirect('/group')
   # cmd = "INSERT INTO groups(group_name, group_type, created_by) VALUES (%s, %s, %s);"
   # db.engine.execute(cmd, (gname, gtype, 1));
